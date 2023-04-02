@@ -1,11 +1,17 @@
+mod project;
+
 use eframe::{CreationContext, App};
+use project::Project;
 
 struct Main {
+    project: Option<Project>,
 }
 
 impl Main {
     pub fn new(_: &CreationContext) -> Self {
-        Self {}
+        Self {
+            project: None,
+        }
     }
 }
 
@@ -18,5 +24,5 @@ impl App for Main {
 }
 
 fn main() {
-    eframe::run_native("Manifest", eframe::NativeOptions::default(), Box::new(|cc| Box::new(Main::new(&cc)))).unwrap();
+    eframe::run_native("Manifest", eframe::NativeOptions::default(), Box::new(|cc| Box::new(Main::new(cc)))).unwrap();
 }
