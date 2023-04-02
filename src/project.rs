@@ -1,9 +1,11 @@
 use std::num::{NonZeroU16, NonZeroU8};
 
+#[derive(Debug, Default)]
 pub struct Project {
     pub header: Header,
 }
 
+#[derive(Debug)]
 pub struct Header {
     pub name: String,
     pub genre: String,

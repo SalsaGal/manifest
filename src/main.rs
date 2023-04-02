@@ -19,6 +19,9 @@ impl App for Main {
     fn update(&mut self, ctx: &egui::Context, _: &mut eframe::Frame) {
         egui::SidePanel::left("control_panel").show(ctx, |ui| {
             ui.heading("Manifest");
+            if ui.button("New File").clicked() {
+                self.project = Some(Project::default());
+            }
         });
     }
 }
