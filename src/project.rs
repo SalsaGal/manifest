@@ -3,6 +3,7 @@ use std::num::{NonZeroU16, NonZeroU8};
 #[derive(Debug, Default)]
 pub struct Project {
     pub header: Header,
+    pub manual_offset: bool,
 }
 
 #[derive(Debug)]

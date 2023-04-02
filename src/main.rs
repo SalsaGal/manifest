@@ -54,10 +54,11 @@ impl App for Main {
                 "Song author:" => song_author,
             );
 
-            number_field!(
-                "BPM:" => bpm: NonZeroU16,
-                "Offset:" => offset: NonZeroU16,
-            );
+            number_field!("BPM:" => bpm: NonZeroU16);
+            ui.checkbox(&mut self.project.manual_offset, "Manual offset");
+            if self.project.manual_offset {
+                number_field!("Offset:" => offset: NonZeroU16);
+            }
         });
     }
 }
