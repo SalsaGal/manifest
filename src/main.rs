@@ -1,6 +1,9 @@
 mod project;
 
+use std::num::NonZeroU16;
+
 use eframe::{CreationContext, App};
+use egui::DragValue;
 use project::Project;
 
 struct Main {
@@ -24,10 +27,22 @@ impl App for Main {
             }
 
             macro_rules! text_field {
-                ($($label: expr => $field: ident),*) => {
+                ($($label: expr => $field: ident),*$(,)?) => {
                     $(
                         ui.label($label);
                         ui.text_edit_singleline(&mut self.project.header.$field);
+                    )*
+                };
+            }
+            macro_rules! number_field {
+                ($($label: expr => $field: ident: $type: ty),*$(,)?) => {
+                    $(
+                        ui.label($label);
+                        let mut new_value = self.project.header.$field.get();
+                        ui.add(DragValue::new(&mut new_value));
+                        if let Some(value) = <$type>::new(new_value) {
+                            self.project.header.$field = value;
+                        }
                     )*
                 };
             }
@@ -36,7 +51,12 @@ impl App for Main {
                 "Name:" => name,
                 "Genre:" => genre,
                 "Level author:" => level_author,
-                "Song author:" => song_author
+                "Song author:" => song_author,
+            );
+
+            number_field!(
+                "BPM:" => bpm: NonZeroU16,
+                "Offset:" => offset: NonZeroU16,
             );
         });
     }
