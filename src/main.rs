@@ -4,13 +4,13 @@ use eframe::{CreationContext, App};
 use project::Project;
 
 struct Main {
-    project: Option<Project>,
+    project: Project,
 }
 
 impl Main {
     pub fn new(_: &CreationContext) -> Self {
         Self {
-            project: None,
+            project: Project::default(),
         }
     }
 }
@@ -20,7 +20,7 @@ impl App for Main {
         egui::SidePanel::left("control_panel").show(ctx, |ui| {
             ui.heading("Manifest");
             if ui.button("New File").clicked() {
-                self.project = Some(Project::default());
+                self.project = Project::default();
             }
         });
     }
