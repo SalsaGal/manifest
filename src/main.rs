@@ -22,6 +22,22 @@ impl App for Main {
             if ui.button("New File").clicked() {
                 self.project = Project::default();
             }
+
+            macro_rules! text_field {
+                ($($label: expr => $field: ident),*) => {
+                    $(
+                        ui.label($label);
+                        ui.text_edit_singleline(&mut self.project.header.$field);
+                    )*
+                };
+            }
+
+            text_field!(
+                "Name:" => name,
+                "Genre:" => genre,
+                "Level author:" => level_author,
+                "Song author:" => song_author
+            );
         });
     }
 }
