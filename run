@@ -1,0 +1,9 @@
+[default]
+cargo run
+
+[default:build]
+cargo build
+
+[check]
+cargo clippy
+cargo fmt
