@@ -1,5 +1,7 @@
 use std::num::{NonZeroU16, NonZeroU8};
 
+use json::{object::Object, JsonValue};
+
 #[derive(Debug, Default)]
 pub struct Project {
     pub header: Header,
@@ -21,6 +23,32 @@ pub struct Header {
     pub color_table: [String; 16],
 }
 
+impl Header {
+    fn as_json(&self) -> Object {
+        // TODO Could be easier to just store as an Object to begin with
+        // no cloning is necessary when creating the object here
+        let mut to_ret = Object::with_capacity(11);
+        macro_rules! add_str {
+            {$($i: ident),*} => {
+                $(
+                    to_ret.insert(stringify!($i), JsonValue::String(self.$i.clone()));
+                )*
+            };
+        }
+        macro_rules! add_num {
+            {$($i: ident),*} => {
+                $(
+                    to_ret.insert(stringify!($i), JsonValue::Number(self.$i.get().into()));
+                )*
+            };
+        }
+        add_str!(name, genre, level_author, song_author, background_effect);
+        add_num!(bpm, offset, time_signature_top, time_signature_bottom);
+        to_ret.insert("bg_color", self.bg_color.into());
+        to_ret
+    }
+}
+
 impl Default for Header {
     fn default() -> Self {
         let time_signature_top = NonZeroU8::new(4).unwrap();
@@ -32,7 +60,10 @@ impl Default for Header {
             level_author: "Anonymous".to_owned(),
             song_author: "Anonymous".to_owned(),
             bpm: NonZeroU16::new(120).unwrap(),
-            offset: NonZeroU16::new(time_signature_top.get() as u16 * time_signature_bottom.get() as u16 * 2).unwrap(),
+            offset: NonZeroU16::new(
+                time_signature_top.get() as u16 * time_signature_bottom.get() as u16 * 2,
+            )
+            .unwrap(),
             time_signature_top,
             time_signature_bottom,
             bg_color: 15,
