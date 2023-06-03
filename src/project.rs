@@ -49,6 +49,18 @@ impl Header {
     }
 }
 
+#[cfg(test)]
+#[test]
+fn header_as_json() {
+    let header = Header {
+        name: "Test".to_owned(),
+        genre: "Maybe".to_owned(),
+        ..Default::default()
+    };
+
+    assert_eq!(header.as_json().pretty(4), "{\n    \"name\": \"Test\",\n    \"genre\": \"Maybe\",\n    \"level_author\": \"Anonymous\",\n    \"song_author\": \"Anonymous\",\n    \"background_effect\": \"none\",\n    \"bpm\": 120,\n    \"offset\": 32,\n    \"time_signature_top\": 4,\n    \"time_signature_bottom\": 4,\n    \"bg_color\": 15\n}");
+}
+
 impl Default for Header {
     fn default() -> Self {
         let time_signature_top = NonZeroU8::new(4).unwrap();
