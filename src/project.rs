@@ -8,8 +8,6 @@ use json::{object::Object, Array, JsonValue};
 pub struct Project {
     pub header: Header,
     pub shapes: Vec<Shape>,
-    // This is here so that the offet can be stored even if its temporarily deactivated
-    pub manual_offset: bool,
 }
 
 impl Project {
@@ -26,6 +24,8 @@ pub struct Header {
     pub song_author: String,
     pub bpm: NonZeroU16,
     pub offset: NonZeroU16,
+    // This is here so that the offet can be stored even if its temporarily deactivated
+    pub manual_offset: bool,
     pub time_signature_top: NonZeroU8,
     pub time_signature_bottom: NonZeroU8,
     pub bg_color: u8,
@@ -86,6 +86,7 @@ impl Default for Header {
                 u16::from(time_signature_top.get()) * u16::from(time_signature_bottom.get()) * 2,
             )
             .unwrap(),
+            manual_offset: false,
             time_signature_top,
             time_signature_bottom,
             bg_color: 15,

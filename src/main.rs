@@ -104,8 +104,8 @@ impl App for Main {
                 );
 
                 number_field!("BPM:" => bpm: NonZeroU16);
-                ui.checkbox(&mut self.project.manual_offset, "Manual offset");
-                if self.project.manual_offset {
+                ui.checkbox(&mut self.project.header.manual_offset, "Manual offset");
+                if self.project.header.manual_offset {
                     number_field!("Offset:" => offset: NonZeroU16);
                 }
 
