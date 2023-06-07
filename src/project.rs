@@ -83,7 +83,7 @@ impl Default for Header {
             song_author: "Anonymous".to_owned(),
             bpm: NonZeroU16::new(120).unwrap(),
             offset: NonZeroU16::new(
-                time_signature_top.get() as u16 * time_signature_bottom.get() as u16 * 2,
+                u16::from(time_signature_top.get()) * u16::from(time_signature_bottom.get()) * 2,
             )
             .unwrap(),
             time_signature_top,
