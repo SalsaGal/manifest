@@ -1,3 +1,4 @@
+mod options;
 mod project;
 
 use std::{fs::File, io::Write, num::NonZeroU16};
@@ -5,16 +6,19 @@ use std::{fs::File, io::Write, num::NonZeroU16};
 use eframe::{emath::RectTransform, epaint::RectShape, App, CreationContext};
 use egui::{DragValue, Pos2, Rect};
 use glam::uvec2;
+use options::Options;
 use project::{Project, Shape};
 use rfd::FileDialog;
 
 struct Main {
+    options: Options,
     project: Project,
 }
 
 impl Main {
     pub fn new(_: &CreationContext) -> Self {
         Self {
+            options: Options::load(),
             project: Project {
                 shapes: vec![
                     Shape {
