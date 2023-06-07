@@ -1,5 +1,6 @@
 mod options;
 mod project;
+mod shape;
 
 use std::{fs::File, io::Write, num::NonZeroU16};
 
@@ -7,8 +8,9 @@ use eframe::{emath::RectTransform, epaint::RectShape, App, CreationContext};
 use egui::{DragValue, Pos2, Rect, ScrollArea};
 use glam::uvec2;
 use options::{Options, OptionsMenu};
-use project::{Project, Shape};
+use project::Project;
 use rfd::FileDialog;
+use shape::Shape;
 
 struct Main {
     options: Options,
@@ -26,17 +28,17 @@ impl Main {
                     Shape {
                         pos: egui::Vec2::new(0.0, 0.0),
                         size: 0.0,
-                        ty: project::ShapeType::Triangle,
+                        ty: shape::ShapeType::Triangle,
                     },
                     Shape {
                         pos: egui::Vec2::new(4.0, 3.0),
                         size: 1.0,
-                        ty: project::ShapeType::Square,
+                        ty: shape::ShapeType::Square,
                     },
                     Shape {
                         pos: egui::Vec2::new(8.0, 7.0),
                         size: 2.0,
-                        ty: project::ShapeType::Circle,
+                        ty: shape::ShapeType::Circle,
                     },
                 ],
                 ..Default::default()
