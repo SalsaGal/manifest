@@ -7,7 +7,7 @@ use std::{
 use etcetera::{choose_app_strategy, AppStrategy, AppStrategyArgs};
 use serde::{Deserialize, Serialize};
 
-#[derive(Default, Serialize, Deserialize)]
+#[derive(Clone, Default, Serialize, Deserialize)]
 pub struct Options {
     executable_path: String,
 }
@@ -34,5 +34,32 @@ impl Options {
         })
         .map(|strategy| strategy.config_dir())
         .unwrap_or_default()
+    }
+}
+
+pub struct OptionsMenu {
+    options: Options,
+
+    pub to_close: bool,
+}
+
+impl OptionsMenu {
+    pub fn new(options: Options) -> Self {
+        Self {
+            options,
+            to_close: false,
+        }
+    }
+
+    pub fn ui(&mut self, ctx: &egui::Context) {
+        egui::CentralPanel::default().show(ctx, |ui| {
+            ui.heading("Options");
+            if ui.button("OK").clicked() {
+                self.to_close = true;
+                self.options.save();
+                return;
+            }
+            self.to_close = ui.button("Cancel").clicked();
+        });
     }
 }
