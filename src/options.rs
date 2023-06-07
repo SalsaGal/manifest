@@ -1,5 +1,5 @@
 use std::{
-    fs::{read_to_string, File},
+    fs::{create_dir_all, read_to_string, File},
     io::Write,
     path::PathBuf,
 };
@@ -22,6 +22,7 @@ impl Options {
     }
 
     pub fn save(&self) {
+        create_dir_all(Self::config_path().parent().unwrap()).unwrap();
         let mut file = File::create(Self::config_path()).unwrap();
         write!(file, "{}", toml::to_string_pretty(self).unwrap()).unwrap();
     }
@@ -32,7 +33,7 @@ impl Options {
             author: "Salsa Gal".to_owned(),
             app_name: "manifest".to_owned(),
         })
-        .map(|strategy| strategy.config_dir())
+        .map(|strategy| strategy.config_dir().join("config.toml"))
         .unwrap_or_default()
     }
 }
