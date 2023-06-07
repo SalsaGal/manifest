@@ -29,16 +29,19 @@ impl Main {
                         pos: egui::Vec2::new(0.0, 0.0),
                         size: 0.0,
                         ty: shape::ShapeType::Triangle,
+                        color: 0,
                     },
                     Shape {
                         pos: egui::Vec2::new(4.0, 3.0),
                         size: 1.0,
                         ty: shape::ShapeType::Square,
+                        color: 2,
                     },
                     Shape {
                         pos: egui::Vec2::new(8.0, 7.0),
                         size: 2.0,
                         ty: shape::ShapeType::Circle,
+                        color: 3,
                     },
                 ],
                 ..Default::default()
@@ -137,11 +140,10 @@ impl App for Main {
 
                 response.mark_changed();
 
-                let shapes = self
-                    .project
-                    .shapes
-                    .iter()
-                    .map(|shape| shape.as_egui_shape(to_screen));
+                let shapes =
+                    self.project.shapes.iter().map(|shape| {
+                        shape.as_egui_shape(to_screen, &self.project.header.color_table)
+                    });
                 painter.extend(shapes);
                 painter.extend((0..15 * 15).map(|i| uvec2(i % 15, i / 15)).map(|pos| {
                     egui::Shape::Rect(RectShape::stroke(
