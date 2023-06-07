@@ -2,8 +2,9 @@ mod project;
 
 use std::{fs::File, io::Write, num::NonZeroU16};
 
-use eframe::{emath::RectTransform, App, CreationContext};
+use eframe::{emath::RectTransform, epaint::RectShape, App, CreationContext};
 use egui::{DragValue, Pos2, Rect};
+use glam::uvec2;
 use project::{Project, Shape};
 use rfd::FileDialog;
 
@@ -14,12 +15,7 @@ struct Main {
 impl Main {
     pub fn new(_: &CreationContext) -> Self {
         Self {
-            project: Project {
-                shapes: vec![Shape {
-                    ty: project::ShapeType::Circle,
-                }],
-                ..Default::default()
-            },
+            project: Project::default(),
         }
     }
 }
@@ -84,7 +80,7 @@ impl App for Main {
             );
 
             let to_screen = RectTransform::from_to(
-                Rect::from_min_size(Pos2::ZERO, response.rect.square_proportions()),
+                Rect::from_min_size(Pos2::ZERO, response.rect.square_proportions() * 17.0),
                 response.rect,
             );
 
@@ -95,8 +91,17 @@ impl App for Main {
                 .shapes
                 .iter()
                 .map(|shape| shape.as_egui_shape(to_screen));
-
             painter.extend(shapes);
+            painter.extend((0..15 * 15).map(|i| uvec2(i % 15, i / 15)).map(|pos| {
+                egui::Shape::Rect(RectShape::stroke(
+                    Rect::from_min_max(
+                        to_screen * Pos2::new(pos.x as f32, pos.y as f32),
+                        to_screen * Pos2::new((pos.x + 1) as f32, (pos.y + 1) as f32),
+                    ),
+                    egui::Rounding::none(),
+                    egui::Stroke::new(1.0, egui::Color32::BLACK),
+                ))
+            }));
 
             response
         });
