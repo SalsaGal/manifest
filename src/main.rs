@@ -2,8 +2,8 @@ mod project;
 
 use std::{fs::File, io::Write, num::NonZeroU16};
 
-use eframe::{App, CreationContext};
-use egui::DragValue;
+use eframe::{emath::RectTransform, App, CreationContext};
+use egui::{DragValue, Pos2, Rect};
 use project::{Project, Shape};
 use rfd::FileDialog;
 
@@ -83,9 +83,18 @@ impl App for Main {
                 egui::Sense::click_and_drag(),
             );
 
+            let to_screen = RectTransform::from_to(
+                Rect::from_min_size(Pos2::ZERO, response.rect.square_proportions()),
+                response.rect,
+            );
+
             response.mark_changed();
 
-            let shapes = self.project.shapes.iter().map(Shape::as_egui_shape);
+            let shapes = self
+                .project
+                .shapes
+                .iter()
+                .map(|shape| shape.as_egui_shape(to_screen));
 
             painter.extend(shapes);
 

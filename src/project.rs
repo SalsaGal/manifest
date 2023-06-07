@@ -1,6 +1,6 @@
 use std::num::{NonZeroU16, NonZeroU8};
 
-use eframe::epaint::CircleShape;
+use eframe::{emath::RectTransform, epaint::CircleShape};
 use egui::{Color32, Pos2};
 use json::{object::Object, Array, JsonValue};
 
@@ -118,11 +118,11 @@ pub struct Shape {
 }
 
 impl Shape {
-    pub fn as_egui_shape(&self) -> egui::Shape {
+    pub fn as_egui_shape(&self, transform: RectTransform) -> egui::Shape {
         match self.ty {
             ShapeType::Circle => egui::Shape::Circle(CircleShape::filled(
-                Pos2::new(500.0, 500.0),
-                50.0,
+                transform * Pos2::new(0.5, 0.5),
+                32.0,
                 Color32::RED,
             )),
             _ => todo!(),
