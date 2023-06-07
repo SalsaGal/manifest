@@ -2,7 +2,6 @@ use std::num::{NonZeroU16, NonZeroU8};
 
 use eframe::{emath::RectTransform, epaint::CircleShape};
 use egui::{Color32, Pos2, Vec2};
-use glam::UVec2;
 use json::{object::Object, Array, JsonValue};
 
 #[derive(Debug, Default)]
@@ -137,7 +136,24 @@ impl Shape {
                 egui::Rounding::none(),
                 Color32::RED,
             )),
-            _ => todo!(),
+            ShapeType::Triangle => egui::Shape::Mesh({
+                let mut mesh = egui::Mesh::default();
+                mesh.colored_vertex(
+                    transform * Pos2::new(self.pos.x - self.size, self.pos.y + 1.0 + self.size),
+                    Color32::RED,
+                );
+                mesh.colored_vertex(
+                    transform
+                        * Pos2::new(self.pos.x + 1.0 + self.size, self.pos.y + 1.0 + self.size),
+                    Color32::RED,
+                );
+                mesh.colored_vertex(
+                    transform * Pos2::new(self.pos.x + 0.5, self.pos.y - self.size),
+                    Color32::RED,
+                );
+                mesh.indices = vec![0, 1, 2];
+                mesh
+            }),
         }
     }
 }

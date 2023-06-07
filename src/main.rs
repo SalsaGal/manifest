@@ -20,7 +20,7 @@ impl Main {
                     Shape {
                         pos: egui::Vec2::new(0.0, 0.0),
                         size: 0.0,
-                        ty: project::ShapeType::Circle,
+                        ty: project::ShapeType::Triangle,
                     },
                     Shape {
                         pos: egui::Vec2::new(4.0, 3.0),
