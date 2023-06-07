@@ -8,7 +8,7 @@ use json::{object::Object, Array, JsonValue};
 pub struct Project {
     pub header: Header,
     pub shapes: Vec<Shape>,
-    // TODO Should be an Option on Header::offset
+    // This is here so that the offet can be stored even if its temporarily deactivated
     pub manual_offset: bool,
 }
 
