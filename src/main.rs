@@ -25,7 +25,7 @@ impl Main {
                     Shape {
                         pos: egui::Vec2::new(4.0, 3.0),
                         size: 1.0,
-                        ty: project::ShapeType::Circle,
+                        ty: project::ShapeType::Square,
                     },
                     Shape {
                         pos: egui::Vec2::new(8.0, 7.0),

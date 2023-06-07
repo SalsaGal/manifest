@@ -128,6 +128,15 @@ impl Shape {
                 transform.scale().max_elem() * (self.size + 0.5),
                 Color32::RED,
             )),
+            ShapeType::Square => egui::Shape::Rect(eframe::epaint::RectShape::filled(
+                egui::Rect::from_min_max(
+                    transform * Pos2::new(self.pos.x - self.size, self.pos.y - self.size),
+                    transform
+                        * Pos2::new(self.pos.x + self.size + 1.0, self.pos.y + self.size + 1.0),
+                ),
+                egui::Rounding::none(),
+                Color32::RED,
+            )),
             _ => todo!(),
         }
     }
