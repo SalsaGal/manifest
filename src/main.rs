@@ -72,6 +72,11 @@ impl App for Main {
                 number_field!("Offset:" => offset: NonZeroU16);
             }
         });
+        egui::CentralPanel::default().show(ctx, |ui| {
+            let (mut response, painter) =
+                ui.allocate_painter(ui.available_size_before_wrap(), egui::Sense::drag());
+            response
+        });
     }
 }
 
