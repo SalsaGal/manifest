@@ -15,7 +15,26 @@ struct Main {
 impl Main {
     pub fn new(_: &CreationContext) -> Self {
         Self {
-            project: Project::default(),
+            project: Project {
+                shapes: vec![
+                    Shape {
+                        pos: egui::Vec2::new(0.0, 0.0),
+                        size: 0.0,
+                        ty: project::ShapeType::Circle,
+                    },
+                    Shape {
+                        pos: egui::Vec2::new(4.0, 3.0),
+                        size: 1.0,
+                        ty: project::ShapeType::Circle,
+                    },
+                    Shape {
+                        pos: egui::Vec2::new(8.0, 7.0),
+                        size: 2.0,
+                        ty: project::ShapeType::Circle,
+                    },
+                ],
+                ..Default::default()
+            },
         }
     }
 }

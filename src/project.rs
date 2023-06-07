@@ -1,7 +1,8 @@
 use std::num::{NonZeroU16, NonZeroU8};
 
 use eframe::{emath::RectTransform, epaint::CircleShape};
-use egui::{Color32, Pos2};
+use egui::{Color32, Pos2, Vec2};
+use glam::UVec2;
 use json::{object::Object, Array, JsonValue};
 
 #[derive(Debug, Default)]
@@ -114,6 +115,8 @@ impl Default for Header {
 
 #[derive(Debug)]
 pub struct Shape {
+    pub pos: Vec2,
+    pub size: f32,
     pub ty: ShapeType,
 }
 
@@ -121,8 +124,8 @@ impl Shape {
     pub fn as_egui_shape(&self, transform: RectTransform) -> egui::Shape {
         match self.ty {
             ShapeType::Circle => egui::Shape::Circle(CircleShape::filled(
-                transform * Pos2::new(0.5, 0.5),
-                32.0,
+                transform * (Pos2::new(0.5, 0.5) + self.pos),
+                transform.scale().max_elem() * (self.size + 0.5),
                 Color32::RED,
             )),
             _ => todo!(),
