@@ -1,10 +1,11 @@
 mod project;
 
-use std::num::NonZeroU16;
+use std::{fs::File, io::Write, num::NonZeroU16};
 
-use eframe::{CreationContext, App};
+use eframe::{App, CreationContext};
 use egui::DragValue;
 use project::Project;
+use rfd::FileDialog;
 
 struct Main {
     project: Project,
@@ -24,6 +25,13 @@ impl App for Main {
             ui.heading("Manifest");
             if ui.button("New File").clicked() {
                 self.project = Project::default();
+            }
+            if ui.button("Export").clicked() {
+                if let Some(path) = FileDialog::new().add_filter("json", &["json"]).save_file() {
+                    let json = self.project.as_json().pretty(4);
+                    let mut file = File::create(path).unwrap();
+                    write!(file, "{json}").unwrap();
+                }
             }
 
             macro_rules! text_field {
@@ -64,5 +72,10 @@ impl App for Main {
 }
 
 fn main() {
-    eframe::run_native("Manifest", eframe::NativeOptions::default(), Box::new(|cc| Box::new(Main::new(cc)))).unwrap();
+    eframe::run_native(
+        "Manifest",
+        eframe::NativeOptions::default(),
+        Box::new(|cc| Box::new(Main::new(cc))),
+    )
+    .unwrap();
 }

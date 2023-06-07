@@ -8,6 +8,12 @@ pub struct Project {
     pub manual_offset: bool,
 }
 
+impl Project {
+    pub fn as_json(&self) -> Object {
+        self.header.as_json()
+    }
+}
+
 #[derive(Debug)]
 pub struct Header {
     pub name: String,
