@@ -4,7 +4,7 @@ mod project;
 use std::{fs::File, io::Write, num::NonZeroU16};
 
 use eframe::{emath::RectTransform, epaint::RectShape, App, CreationContext};
-use egui::{DragValue, Pos2, Rect};
+use egui::{DragValue, Pos2, Rect, ScrollArea};
 use glam::uvec2;
 use options::{Options, OptionsMenu};
 use project::{Project, Shape};
@@ -54,6 +54,9 @@ impl App for Main {
                 self.options = Options::load();
             }
         } else {
+            egui::TopBottomPanel::bottom("shapes").show(ctx, |ui| {
+                ScrollArea::horizontal().show(ui, |ui| ui.horizontal(|ui| {}))
+            });
             egui::SidePanel::left("control_panel").show(ctx, |ui| {
                 ui.heading("Manifest");
                 if ui.button("New File").clicked() {
