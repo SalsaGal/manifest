@@ -1,18 +1,20 @@
 use std::num::{NonZeroU16, NonZeroU8};
 
+use eframe::epaint::CircleShape;
+use egui::{Color32, Pos2};
 use json::{object::Object, Array, JsonValue};
 
 #[derive(Debug, Default)]
 pub struct Project {
     pub header: Header,
+    pub shapes: Vec<Shape>,
+    // TODO Should be an Option on Header::offset
     pub manual_offset: bool,
 }
 
 impl Project {
     pub fn as_json(&self) -> Array {
-        let mut to_ret = Array::with_capacity(1);
-        to_ret.push(self.header.as_json().into());
-        to_ret
+        vec![self.header.as_json().into()]
     }
 }
 
@@ -108,4 +110,29 @@ impl Default for Header {
             ],
         }
     }
+}
+
+#[derive(Debug)]
+pub struct Shape {
+    pub ty: ShapeType,
+}
+
+impl Shape {
+    pub fn as_egui_shape(&self) -> egui::Shape {
+        match self.ty {
+            ShapeType::Circle => egui::Shape::Circle(CircleShape::filled(
+                Pos2::new(500.0, 500.0),
+                50.0,
+                Color32::RED,
+            )),
+            _ => todo!(),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum ShapeType {
+    Circle,
+    Square,
+    Triangle,
 }

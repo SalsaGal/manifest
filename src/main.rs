@@ -4,7 +4,7 @@ use std::{fs::File, io::Write, num::NonZeroU16};
 
 use eframe::{App, CreationContext};
 use egui::DragValue;
-use project::Project;
+use project::{Project, Shape};
 use rfd::FileDialog;
 
 struct Main {
@@ -14,7 +14,12 @@ struct Main {
 impl Main {
     pub fn new(_: &CreationContext) -> Self {
         Self {
-            project: Project::default(),
+            project: Project {
+                shapes: vec![Shape {
+                    ty: project::ShapeType::Circle,
+                }],
+                ..Default::default()
+            },
         }
     }
 }
@@ -73,8 +78,17 @@ impl App for Main {
             }
         });
         egui::CentralPanel::default().show(ctx, |ui| {
-            let (mut response, painter) =
-                ui.allocate_painter(ui.available_size_before_wrap(), egui::Sense::drag());
+            let (mut response, painter) = ui.allocate_painter(
+                ui.available_size_before_wrap(),
+                egui::Sense::click_and_drag(),
+            );
+
+            response.mark_changed();
+
+            let shapes = self.project.shapes.iter().map(Shape::as_egui_shape);
+
+            painter.extend(shapes);
+
             response
         });
     }
