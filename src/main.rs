@@ -32,7 +32,7 @@ impl App for Main {
                     if path.extension().is_none() {
                         path.set_extension("json");
                     }
-                    let json = self.project.as_json().pretty(4);
+                    let json = json::stringify_pretty(self.project.as_json(), 4);
                     let mut file = File::create(path).unwrap();
                     write!(file, "{json}").unwrap();
                 }

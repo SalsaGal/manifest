@@ -1,6 +1,6 @@
 use std::num::{NonZeroU16, NonZeroU8};
 
-use json::{object::Object, JsonValue};
+use json::{object::Object, Array, JsonValue};
 
 #[derive(Debug, Default)]
 pub struct Project {
@@ -9,8 +9,10 @@ pub struct Project {
 }
 
 impl Project {
-    pub fn as_json(&self) -> Object {
-        self.header.as_json()
+    pub fn as_json(&self) -> Array {
+        let mut to_ret = Array::with_capacity(1);
+        to_ret.push(self.header.as_json().into());
+        to_ret
     }
 }
 
@@ -32,7 +34,7 @@ pub struct Header {
 impl Header {
     fn as_json(&self) -> Object {
         // TODO Could be easier to just store as an Object to begin with
-        // no cloning is necessary when creating the object here
+        // so no cloning is necessary when creating the object here
         let mut to_ret = Object::with_capacity(11);
         macro_rules! add_str {
             {$($i: ident),*} => {
