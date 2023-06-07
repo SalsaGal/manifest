@@ -19,9 +19,15 @@ struct Main {
 }
 
 impl Main {
-    pub fn new(_: &CreationContext) -> Self {
+    pub fn new(ctx: &CreationContext) -> Self {
+        let options = Options::load();
+        ctx.egui_ctx.set_visuals(match options.dark_theme {
+            true => egui::Visuals::dark(),
+            false => egui::Visuals::light(),
+        });
+
         Self {
-            options: Options::load(),
+            options,
             options_menu: None,
             project: Project {
                 shapes: vec![

@@ -7,9 +7,10 @@ use std::{
 use etcetera::{choose_app_strategy, AppStrategy, AppStrategyArgs};
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Default, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Options {
-    executable_path: String,
+    pub dark_theme: bool,
+    pub executable_path: String,
 }
 
 impl Options {
@@ -38,6 +39,15 @@ impl Options {
     }
 }
 
+impl Default for Options {
+    fn default() -> Self {
+        Self {
+            dark_theme: true,
+            executable_path: "".to_owned(),
+        }
+    }
+}
+
 pub struct OptionsMenu {
     options: Options,
 
@@ -55,6 +65,17 @@ impl OptionsMenu {
     pub fn ui(&mut self, ctx: &egui::Context) {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Options");
+
+            if ui
+                .checkbox(&mut self.options.dark_theme, "Dark mode")
+                .clicked()
+            {
+                ctx.set_visuals(match self.options.dark_theme {
+                    true => egui::Visuals::dark(),
+                    false => egui::Visuals::light(),
+                });
+            }
+
             if ui.button("OK").clicked() {
                 self.to_close = true;
                 self.options.save();
