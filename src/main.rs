@@ -27,7 +27,11 @@ impl App for Main {
                 self.project = Project::default();
             }
             if ui.button("Export").clicked() {
-                if let Some(path) = FileDialog::new().add_filter("json", &["json"]).save_file() {
+                if let Some(mut path) = FileDialog::new().add_filter("json", &["json"]).save_file()
+                {
+                    if path.extension().is_none() {
+                        path.set_extension("json");
+                    }
                     let json = self.project.as_json().pretty(4);
                     let mut file = File::create(path).unwrap();
                     write!(file, "{json}").unwrap();
