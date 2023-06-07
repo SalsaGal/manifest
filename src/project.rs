@@ -30,7 +30,7 @@ pub struct Header {
     pub time_signature_bottom: NonZeroU8,
     pub bg_color: u8,
     pub background_effect: String,
-    pub color_table: [String; 16],
+    pub color_table: [[u8; 3]; 16],
 }
 
 impl Header {
@@ -55,6 +55,14 @@ impl Header {
         add_str!(name, genre, level_author, song_author, background_effect);
         add_num!(bpm, offset, time_signature_top, time_signature_bottom);
         to_ret.insert("bg_color", self.bg_color.into());
+        to_ret.insert(
+            "color_table",
+            self.color_table
+                .iter()
+                .map(|color| format!("#{:02X}{:02X}{:02X}", color[0], color[1], color[2]))
+                .collect::<Vec<_>>()
+                .into(),
+        );
         to_ret
     }
 }
@@ -92,22 +100,22 @@ impl Default for Header {
             bg_color: 15,
             background_effect: "none".to_owned(),
             color_table: [
-                "#FFF".to_owned(),
-                "#00F".to_owned(),
-                "#0F0".to_owned(),
-                "#0FF".to_owned(),
-                "#F00".to_owned(),
-                "#F0F".to_owned(),
-                "#F60".to_owned(),
-                "#AAA".to_owned(),
-                "#666".to_owned(),
-                "#66F".to_owned(),
-                "#6F6".to_owned(),
-                "#6FF".to_owned(),
-                "#F66".to_owned(),
-                "#F6F".to_owned(),
-                "#FF2".to_owned(),
-                "#000".to_owned(),
+                [0xFF, 0xFF, 0xFF],
+                [0x00, 0x00, 0xFF],
+                [0x00, 0xFF, 0x00],
+                [0x00, 0xFF, 0xFF],
+                [0xFF, 0x00, 0x00],
+                [0xFF, 0x00, 0xFF],
+                [0xFF, 0x66, 0x00],
+                [0xAA, 0xAA, 0xAA],
+                [0x66, 0x66, 0x66],
+                [0x66, 0x66, 0xFF],
+                [0x66, 0xFF, 0x66],
+                [0x66, 0xFF, 0xFF],
+                [0xFF, 0x66, 0x66],
+                [0xFF, 0x66, 0xFF],
+                [0xFF, 0xFF, 0x22],
+                [0x00, 0x00, 0x00],
             ],
         }
     }
