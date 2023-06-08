@@ -14,7 +14,12 @@ pub struct Project {
 }
 
 impl Project {
-    pub fn draw(&self, ui: &mut egui::Ui, bounds: Option<Vec2>) -> egui::Response {
+    pub fn draw(
+        &self,
+        ui: &mut egui::Ui,
+        bounds: Option<Vec2>,
+        shape_count: usize,
+    ) -> egui::Response {
         let (mut response, painter) = ui.allocate_painter(
             bounds.unwrap_or_else(|| ui.available_size_before_wrap()),
             egui::Sense::click_and_drag(),
@@ -30,6 +35,7 @@ impl Project {
         let shapes = self
             .shapes
             .iter()
+            .take(shape_count)
             .map(|shape| shape.as_egui_shape(to_screen, &self.header.color_table));
         painter.extend(shapes);
         painter.extend((0..15 * 15).map(|i| uvec2(i % 15, i / 15)).map(|pos| {
