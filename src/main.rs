@@ -5,7 +5,7 @@ mod shape;
 use std::{fs::File, io::Write, num::NonZeroU16};
 
 use eframe::{App, CreationContext};
-use egui::{DragValue, ScrollArea, Vec2};
+use egui::{DragValue, Key, ScrollArea, Vec2};
 use options::{Options, OptionsMenu};
 use project::Project;
 use rfd::FileDialog;
@@ -147,7 +147,7 @@ impl App for Main {
                     for i in 0..self.project.shapes.len() {
                         if self
                             .project
-                            .draw(ui, Some(Vec2::splat(width)), i + 1, false)
+                            .draw(ui, Some(Vec2::splat(width)), i + 1)
                             .clicked()
                         {
                             self.selected_shape = i;
@@ -159,7 +159,21 @@ impl App for Main {
                 ScrollArea::horizontal().show(ui, |ui| ui.horizontal(|ui| {}))
             });
             egui::CentralPanel::default().show(ctx, |ui| {
-                self.project.draw(ui, None, self.selected_shape + 1, true)
+                ui.input(|input| {
+                    if input.key_pressed(Key::W) || input.key_pressed(Key::ArrowUp) {
+                        self.project.shapes[self.selected_shape].pos.y -= 1.0;
+                    }
+                    if input.key_pressed(Key::S) || input.key_pressed(Key::ArrowDown) {
+                        self.project.shapes[self.selected_shape].pos.y += 1.0;
+                    }
+                    if input.key_pressed(Key::A) || input.key_pressed(Key::ArrowLeft) {
+                        self.project.shapes[self.selected_shape].pos.x -= 1.0;
+                    }
+                    if input.key_pressed(Key::D) || input.key_pressed(Key::ArrowRight) {
+                        self.project.shapes[self.selected_shape].pos.x += 1.0;
+                    }
+                });
+                self.project.draw(ui, None, self.selected_shape + 1)
             });
         }
     }
