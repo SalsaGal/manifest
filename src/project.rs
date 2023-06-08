@@ -1,5 +1,8 @@
 use std::num::{NonZeroU16, NonZeroU8};
 
+use eframe::{emath::RectTransform, epaint::RectShape};
+use egui::{Pos2, Rect};
+use glam::uvec2;
 use json::{object::Object, Array, JsonValue};
 
 use crate::shape::Shape;
@@ -11,6 +14,38 @@ pub struct Project {
 }
 
 impl Project {
+    pub fn draw(&self, ui: &mut egui::Ui) -> egui::Response {
+        let (mut response, painter) = ui.allocate_painter(
+            ui.available_size_before_wrap(),
+            egui::Sense::click_and_drag(),
+        );
+
+        let to_screen = RectTransform::from_to(
+            Rect::from_min_size(Pos2::ZERO, response.rect.square_proportions() * 17.0),
+            response.rect,
+        );
+
+        response.mark_changed();
+
+        let shapes = self
+            .shapes
+            .iter()
+            .map(|shape| shape.as_egui_shape(to_screen, &self.header.color_table));
+        painter.extend(shapes);
+        painter.extend((0..15 * 15).map(|i| uvec2(i % 15, i / 15)).map(|pos| {
+            egui::Shape::Rect(RectShape::stroke(
+                Rect::from_min_max(
+                    to_screen * Pos2::new(pos.x as f32, pos.y as f32),
+                    to_screen * Pos2::new((pos.x + 1) as f32, (pos.y + 1) as f32),
+                ),
+                egui::Rounding::none(),
+                egui::Stroke::new(1.0, egui::Color32::BLACK),
+            ))
+        }));
+
+        response
+    }
+
     pub fn as_json(&self) -> Array {
         vec![self.header.as_json().into()]
     }
