@@ -208,7 +208,8 @@ impl App for Main {
                         None
                     };
                     if let Some(to_add) = to_add {
-                        if self.project.shapes.len() < self.selected_shape {
+                        if self.project.shapes.len() <= self.selected_shape {
+                            self.selected_shape = self.project.shapes.len();
                             self.project.shapes.push(to_add);
                         } else {
                             self.selected_shape += 1;
