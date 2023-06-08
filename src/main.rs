@@ -5,7 +5,7 @@ mod shape;
 use std::{fs::File, io::Write, num::NonZeroU16};
 
 use eframe::{App, CreationContext};
-use egui::{DragValue, ScrollArea};
+use egui::{DragValue, ScrollArea, Vec2};
 use options::{Options, OptionsMenu};
 use project::Project;
 use rfd::FileDialog;
@@ -45,6 +45,12 @@ impl Main {
                     Shape {
                         pos: egui::Vec2::new(8.0, 7.0),
                         size: 2.0,
+                        ty: shape::ShapeType::Circle,
+                        color: 3,
+                    },
+                    Shape {
+                        pos: egui::Vec2::new(10.0, 14.0),
+                        size: 0.0,
                         ty: shape::ShapeType::Circle,
                         color: 3,
                     },
@@ -130,7 +136,18 @@ impl App for Main {
                 });
             });
             egui::SidePanel::right("shapes").show(ctx, |ui| {
-                ScrollArea::vertical().show(ui, |ui| {});
+                ScrollArea::vertical().show(ui, |ui| {
+                    let width = ui.available_size_before_wrap().x;
+                    for i in 0..self.project.shapes.len() {
+                        if self
+                            .project
+                            .draw(ui, Some(Vec2::splat(width)), i + 1)
+                            .clicked()
+                        {
+                            println!("Clicked {i}");
+                        }
+                    }
+                });
             });
             egui::TopBottomPanel::bottom("steps").show(ctx, |ui| {
                 ScrollArea::horizontal().show(ui, |ui| ui.horizontal(|ui| {}))
