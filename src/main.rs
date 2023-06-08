@@ -147,59 +147,61 @@ impl App for Main {
                 })
             });
             egui::CentralPanel::default().show(ctx, |ui| {
-                ui.input(|input| {
-                    if let Some(shape) = self.project.shapes.get_mut(self.selected_shape) {
-                        if input.key_pressed(Key::ArrowUp) {
-                            shape.pos.y = (shape.pos.y - 1.0).max(0.0);
+                if ctx.memory(|mem| mem.focus().is_none()) {
+                    ui.input(|input| {
+                        if let Some(shape) = self.project.shapes.get_mut(self.selected_shape) {
+                            if input.key_pressed(Key::ArrowUp) {
+                                shape.pos.y = (shape.pos.y - 1.0).max(0.0);
+                            }
+                            if input.key_pressed(Key::ArrowDown) {
+                                shape.pos.y = (shape.pos.y + 1.0).min(14.0);
+                            }
+                            if input.key_pressed(Key::ArrowLeft) {
+                                shape.pos.x = (shape.pos.x - 1.0).max(0.0);
+                            }
+                            if input.key_pressed(Key::ArrowRight) {
+                                shape.pos.x = (shape.pos.x + 1.0).min(14.0);
+                            }
+                            if input.key_pressed(Key::A) {
+                                shape.size = (shape.size - 1.0).max(0.0);
+                            }
+                            if input.key_pressed(Key::S) {
+                                shape.size = (shape.size + 1.0).min(7.0);
+                            }
+                            if input.key_pressed(Key::Enter) {
+                                self.selected_shape =
+                                    (self.selected_shape + 1) % self.project.shapes.len();
+                            }
                         }
-                        if input.key_pressed(Key::ArrowDown) {
-                            shape.pos.y = (shape.pos.y + 1.0).min(14.0);
-                        }
-                        if input.key_pressed(Key::ArrowLeft) {
-                            shape.pos.x = (shape.pos.x - 1.0).max(0.0);
-                        }
-                        if input.key_pressed(Key::ArrowRight) {
-                            shape.pos.x = (shape.pos.x + 1.0).min(14.0);
-                        }
-                        if input.key_pressed(Key::A) {
-                            shape.size = (shape.size - 1.0).max(0.0);
-                        }
-                        if input.key_pressed(Key::S) {
-                            shape.size = (shape.size + 1.0).min(7.0);
-                        }
-                        if input.key_pressed(Key::Enter) {
-                            self.selected_shape =
-                                (self.selected_shape + 1) % self.project.shapes.len();
-                        }
-                    }
-                    let to_add = if input.key_pressed(Key::Z) {
-                        Some(Shape {
-                            ty: shape::ShapeType::Circle,
-                            ..Default::default()
-                        })
-                    } else if input.key_pressed(Key::X) {
-                        Some(Shape {
-                            ty: shape::ShapeType::Square,
-                            ..Default::default()
-                        })
-                    } else if input.key_pressed(Key::C) {
-                        Some(Shape {
-                            ty: shape::ShapeType::Triangle,
-                            ..Default::default()
-                        })
-                    } else {
-                        None
-                    };
-                    if let Some(to_add) = to_add {
-                        if self.project.shapes.len() <= self.selected_shape {
-                            self.selected_shape = self.project.shapes.len();
-                            self.project.shapes.push(to_add);
+                        let to_add = if input.key_pressed(Key::Z) {
+                            Some(Shape {
+                                ty: shape::ShapeType::Circle,
+                                ..Default::default()
+                            })
+                        } else if input.key_pressed(Key::X) {
+                            Some(Shape {
+                                ty: shape::ShapeType::Square,
+                                ..Default::default()
+                            })
+                        } else if input.key_pressed(Key::C) {
+                            Some(Shape {
+                                ty: shape::ShapeType::Triangle,
+                                ..Default::default()
+                            })
                         } else {
-                            self.selected_shape += 1;
-                            self.project.shapes.insert(self.selected_shape, to_add);
+                            None
+                        };
+                        if let Some(to_add) = to_add {
+                            if self.project.shapes.len() <= self.selected_shape {
+                                self.selected_shape = self.project.shapes.len();
+                                self.project.shapes.push(to_add);
+                            } else {
+                                self.selected_shape += 1;
+                                self.project.shapes.insert(self.selected_shape, to_add);
+                            }
                         }
-                    }
-                });
+                    });
+                }
                 self.project.draw(ui, None, self.selected_shape + 1)
             });
         }
