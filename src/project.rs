@@ -53,7 +53,9 @@ impl Project {
     }
 
     pub fn as_json(&self) -> Array {
-        vec![self.header.as_json().into()]
+        let mut to_ret: Vec<JsonValue> = vec![self.header.as_json().into()];
+        to_ret.extend(self.shapes.iter().map(Shape::as_json).map(JsonValue::from));
+        to_ret
     }
 }
 

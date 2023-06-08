@@ -1,5 +1,6 @@
 use eframe::emath::RectTransform;
 use egui::{Color32, Pos2, Vec2};
+use json::object::Object;
 
 #[derive(Debug)]
 pub struct Shape {
@@ -10,6 +11,24 @@ pub struct Shape {
 }
 
 impl Shape {
+    pub fn as_json(&self) -> Object {
+        let mut to_ret = Object::with_capacity(6);
+        to_ret.insert(
+            "shape",
+            match self.ty {
+                ShapeType::Circle => 0,
+                ShapeType::Square => 1,
+                ShapeType::Triangle => 2,
+            }
+            .into(),
+        );
+        to_ret.insert("color", self.color.into());
+        to_ret.insert("x", self.pos.x.into());
+        to_ret.insert("y", self.pos.y.into());
+        to_ret.insert("scale", (self.size + 1.0).into());
+        to_ret
+    }
+
     pub fn as_egui_shape(&self, transform: RectTransform, colors: &[[u8; 3]; 16]) -> egui::Shape {
         let color_array = colors[self.color];
         let color = Color32::from_rgb(color_array[0], color_array[1], color_array[2]);
