@@ -139,6 +139,9 @@ impl App for Main {
                 });
             });
             egui::SidePanel::right("shapes").show(ctx, |ui| {
+                if ui.button("Remove shape").clicked() {
+                    self.project.shapes.remove(self.selected_shape);
+                }
                 ScrollArea::vertical().show(ui, |ui| {
                     let width = ui.available_size_before_wrap().x;
                     for i in 0..self.project.shapes.len() {
