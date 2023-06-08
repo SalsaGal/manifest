@@ -51,6 +51,17 @@ impl Shape {
     }
 }
 
+impl Default for Shape {
+    fn default() -> Self {
+        Self {
+            pos: Vec2::new(7.0, 7.0),
+            size: 0.0,
+            ty: ShapeType::Circle,
+            color: 0,
+        }
+    }
+}
+
 #[derive(Debug)]
 pub enum ShapeType {
     Circle,

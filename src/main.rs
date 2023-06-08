@@ -145,6 +145,7 @@ impl App for Main {
             egui::SidePanel::right("shapes").show(ctx, |ui| {
                 if ui.button("Remove shape").clicked() {
                     self.project.shapes.remove(self.selected_shape);
+                    self.selected_shape = self.selected_shape.saturating_sub(1);
                 }
                 ScrollArea::vertical().show(ui, |ui| {
                     let width = ui.available_size_before_wrap().x;
@@ -186,6 +187,32 @@ impl App for Main {
                         if input.key_pressed(Key::Enter) {
                             self.selected_shape =
                                 (self.selected_shape + 1) % self.project.shapes.len();
+                        }
+                    }
+                    let to_add = if input.key_pressed(Key::Z) {
+                        Some(Shape {
+                            ty: shape::ShapeType::Circle,
+                            ..Default::default()
+                        })
+                    } else if input.key_pressed(Key::X) {
+                        Some(Shape {
+                            ty: shape::ShapeType::Square,
+                            ..Default::default()
+                        })
+                    } else if input.key_pressed(Key::C) {
+                        Some(Shape {
+                            ty: shape::ShapeType::Triangle,
+                            ..Default::default()
+                        })
+                    } else {
+                        None
+                    };
+                    if let Some(to_add) = to_add {
+                        if self.project.shapes.len() < self.selected_shape {
+                            self.project.shapes.push(to_add);
+                        } else {
+                            self.selected_shape += 1;
+                            self.project.shapes.insert(self.selected_shape, to_add);
                         }
                     }
                 });
