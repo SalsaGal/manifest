@@ -147,7 +147,7 @@ impl App for Main {
                     for i in 0..self.project.shapes.len() {
                         if self
                             .project
-                            .draw(ui, Some(Vec2::splat(width)), i + 1)
+                            .draw(ui, Some(Vec2::splat(width)), i + 1, false)
                             .clicked()
                         {
                             self.selected_shape = i;
@@ -159,7 +159,7 @@ impl App for Main {
                 ScrollArea::horizontal().show(ui, |ui| ui.horizontal(|ui| {}))
             });
             egui::CentralPanel::default().show(ctx, |ui| {
-                self.project.draw(ui, None, self.selected_shape + 1)
+                self.project.draw(ui, None, self.selected_shape + 1, true)
             });
         }
     }

@@ -1,7 +1,7 @@
 use std::num::{NonZeroU16, NonZeroU8};
 
 use eframe::{emath::RectTransform, epaint::RectShape};
-use egui::{Pos2, Rect, Vec2};
+use egui::{Key, Pos2, Rect, Vec2};
 use glam::uvec2;
 use json::{object::Object, Array, JsonValue};
 
@@ -15,11 +15,29 @@ pub struct Project {
 
 impl Project {
     pub fn draw(
-        &self,
+        &mut self,
         ui: &mut egui::Ui,
         bounds: Option<Vec2>,
         shape_count: usize,
+        workspace: bool,
     ) -> egui::Response {
+        if workspace {
+            ui.input(|input| {
+                if input.key_pressed(Key::W) || input.key_pressed(Key::ArrowUp) {
+                    self.shapes[shape_count - 1].pos.y -= 1.0;
+                }
+                if input.key_pressed(Key::S) || input.key_pressed(Key::ArrowDown) {
+                    self.shapes[shape_count - 1].pos.y += 1.0;
+                }
+                if input.key_pressed(Key::A) || input.key_pressed(Key::ArrowLeft) {
+                    self.shapes[shape_count - 1].pos.x -= 1.0;
+                }
+                if input.key_pressed(Key::D) || input.key_pressed(Key::ArrowRight) {
+                    self.shapes[shape_count - 1].pos.x += 1.0;
+                }
+            });
+        }
+
         let (mut response, painter) = ui.allocate_painter(
             bounds.unwrap_or_else(|| ui.available_size_before_wrap()),
             egui::Sense::click_and_drag(),
