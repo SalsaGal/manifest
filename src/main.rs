@@ -65,9 +65,6 @@ impl App for Main {
                 self.options = Options::load();
             }
         } else {
-            egui::TopBottomPanel::bottom("shapes").show(ctx, |ui| {
-                ScrollArea::horizontal().show(ui, |ui| ui.horizontal(|ui| {}))
-            });
             egui::SidePanel::left("control_panel").show(ctx, |ui| {
                 ScrollArea::vertical().show(ui, |ui| {
                     ui.heading("Manifest");
@@ -132,6 +129,12 @@ impl App for Main {
                         self.options_menu = Some(OptionsMenu::new(self.options.clone()));
                     }
                 });
+            });
+            egui::SidePanel::right("shapes").show(ctx, |ui| {
+                ScrollArea::vertical().show(ui, |ui| {});
+            });
+            egui::TopBottomPanel::bottom("steps").show(ctx, |ui| {
+                ScrollArea::horizontal().show(ui, |ui| ui.horizontal(|ui| {}))
             });
             egui::CentralPanel::default().show(ctx, |ui| {
                 let (mut response, painter) = ui.allocate_painter(
