@@ -11,6 +11,8 @@ use project::Project;
 use rfd::FileDialog;
 use shape::Shape;
 
+const BUILD_VERSION: &str = env!("CARGO_PKG_VERSION");
+
 struct Main {
     options: Options,
     options_menu: Option<OptionsMenu>,
@@ -136,6 +138,8 @@ impl App for Main {
                     if ui.button("Options").clicked() {
                         self.options_menu = Some(OptionsMenu::new(self.options.clone()));
                     }
+
+                    ui.small(BUILD_VERSION);
                 });
             });
             egui::SidePanel::right("shapes").show(ctx, |ui| {
@@ -177,7 +181,7 @@ impl App for Main {
                         shape.size = (shape.size - 1.0).max(0.0);
                     }
                     if input.key_pressed(Key::S) {
-                        shape.size = (shape.size + 1.0).min(5.0);
+                        shape.size = (shape.size + 1.0).min(7.0);
                     }
                     if input.key_pressed(Key::Enter) {
                         self.selected_shape = (self.selected_shape + 1) % self.project.shapes.len();
