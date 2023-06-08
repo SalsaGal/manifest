@@ -15,6 +15,8 @@ struct Main {
     options: Options,
     options_menu: Option<OptionsMenu>,
     project: Project,
+
+    selected_shape: usize,
 }
 
 impl Main {
@@ -57,6 +59,7 @@ impl Main {
                 ],
                 ..Default::default()
             },
+            selected_shape: 0,
         }
     }
 }
@@ -144,7 +147,7 @@ impl App for Main {
                             .draw(ui, Some(Vec2::splat(width)), i + 1)
                             .clicked()
                         {
-                            println!("Clicked {i}");
+                            self.selected_shape = i;
                         }
                     }
                 });
@@ -152,7 +155,9 @@ impl App for Main {
             egui::TopBottomPanel::bottom("steps").show(ctx, |ui| {
                 ScrollArea::horizontal().show(ui, |ui| ui.horizontal(|ui| {}))
             });
-            egui::CentralPanel::default().show(ctx, |ui| self.project.draw(ui, None, usize::MAX));
+            egui::CentralPanel::default().show(ctx, |ui| {
+                self.project.draw(ui, None, self.selected_shape + 1)
+            });
         }
     }
 }
