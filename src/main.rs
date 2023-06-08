@@ -160,23 +160,24 @@ impl App for Main {
             });
             egui::CentralPanel::default().show(ctx, |ui| {
                 ui.input(|input| {
+                    let shape = &mut self.project.shapes[self.selected_shape];
                     if input.key_pressed(Key::ArrowUp) {
-                        self.project.shapes[self.selected_shape].pos.y -= 1.0;
+                        shape.pos.y = (shape.pos.y - 1.0).max(0.0);
                     }
                     if input.key_pressed(Key::ArrowDown) {
-                        self.project.shapes[self.selected_shape].pos.y += 1.0;
+                        shape.pos.y = (shape.pos.y + 1.0).min(14.0);
                     }
                     if input.key_pressed(Key::ArrowLeft) {
-                        self.project.shapes[self.selected_shape].pos.x -= 1.0;
+                        shape.pos.x = (shape.pos.x - 1.0).max(0.0);
                     }
                     if input.key_pressed(Key::ArrowRight) {
-                        self.project.shapes[self.selected_shape].pos.x += 1.0;
+                        shape.pos.x = (shape.pos.x + 1.0).min(14.0);
                     }
                     if input.key_pressed(Key::A) {
-                        self.project.shapes[self.selected_shape].size -= 1.0;
+                        shape.size = (shape.size - 1.0).max(0.0);
                     }
                     if input.key_pressed(Key::S) {
-                        self.project.shapes[self.selected_shape].size += 1.0;
+                        shape.size = (shape.size + 1.0).min(5.0);
                     }
                     if input.key_pressed(Key::Enter) {
                         self.selected_shape = (self.selected_shape + 1) % self.project.shapes.len();
