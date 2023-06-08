@@ -135,7 +135,7 @@ impl App for Main {
             egui::TopBottomPanel::bottom("steps").show(ctx, |ui| {
                 ScrollArea::horizontal().show(ui, |ui| ui.horizontal(|ui| {}))
             });
-            egui::CentralPanel::default().show(ctx, |ui| self.project.draw(ui));
+            egui::CentralPanel::default().show(ctx, |ui| self.project.draw(ui, None));
         }
     }
 }

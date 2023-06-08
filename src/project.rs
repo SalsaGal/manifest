@@ -1,7 +1,7 @@
 use std::num::{NonZeroU16, NonZeroU8};
 
 use eframe::{emath::RectTransform, epaint::RectShape};
-use egui::{Pos2, Rect};
+use egui::{Pos2, Rect, Vec2};
 use glam::uvec2;
 use json::{object::Object, Array, JsonValue};
 
@@ -14,9 +14,9 @@ pub struct Project {
 }
 
 impl Project {
-    pub fn draw(&self, ui: &mut egui::Ui) -> egui::Response {
+    pub fn draw(&self, ui: &mut egui::Ui, bounds: Option<Vec2>) -> egui::Response {
         let (mut response, painter) = ui.allocate_painter(
-            ui.available_size_before_wrap(),
+            bounds.unwrap_or_else(|| ui.available_size_before_wrap()),
             egui::Sense::click_and_drag(),
         );
 
