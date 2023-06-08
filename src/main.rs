@@ -13,6 +13,7 @@ use shape::Shape;
 
 const BUILD_VERSION: &str = env!("CARGO_PKG_VERSION");
 
+#[derive(Default)]
 struct Main {
     options: Options,
     options_menu: Option<OptionsMenu>,
@@ -29,40 +30,7 @@ impl Main {
             false => egui::Visuals::light(),
         });
 
-        Self {
-            options,
-            options_menu: None,
-            project: Project {
-                shapes: vec![
-                    Shape {
-                        pos: egui::Vec2::new(0.0, 0.0),
-                        size: 0.0,
-                        ty: shape::ShapeType::Triangle,
-                        color: 0,
-                    },
-                    Shape {
-                        pos: egui::Vec2::new(4.0, 3.0),
-                        size: 1.0,
-                        ty: shape::ShapeType::Square,
-                        color: 2,
-                    },
-                    Shape {
-                        pos: egui::Vec2::new(8.0, 7.0),
-                        size: 2.0,
-                        ty: shape::ShapeType::Circle,
-                        color: 3,
-                    },
-                    Shape {
-                        pos: egui::Vec2::new(10.0, 14.0),
-                        size: 0.0,
-                        ty: shape::ShapeType::Circle,
-                        color: 3,
-                    },
-                ],
-                ..Default::default()
-            },
-            selected_shape: 0,
-        }
+        Self::default()
     }
 }
 
@@ -165,7 +133,18 @@ impl App for Main {
                 });
             });
             egui::TopBottomPanel::bottom("steps").show(ctx, |ui| {
-                ScrollArea::horizontal().show(ui, |ui| ui.horizontal(|ui| {}))
+                ScrollArea::horizontal().show(ui, |ui| {
+                    if let Some(shape) = self.project.shapes.get_mut(self.selected_shape) {
+                        ui.horizontal(|ui| match &shape.moves {
+                            Some(moves) => {}
+                            None => {
+                                if ui.button("Add Sequence").clicked() {
+                                    shape.moves = Some(vec![]);
+                                }
+                            }
+                        });
+                    }
+                })
             });
             egui::CentralPanel::default().show(ctx, |ui| {
                 ui.input(|input| {

@@ -8,6 +8,7 @@ pub struct Shape {
     pub size: f32,
     pub ty: ShapeType,
     pub color: usize,
+    pub moves: Option<Vec<Move>>,
 }
 
 impl Shape {
@@ -77,6 +78,7 @@ impl Default for Shape {
             size: 0.0,
             ty: ShapeType::Circle,
             color: 0,
+            moves: None,
         }
     }
 }
@@ -86,4 +88,14 @@ pub enum ShapeType {
     Circle,
     Square,
     Triangle,
+}
+
+#[derive(Debug)]
+pub enum Move {
+    Up,
+    Down,
+    Left,
+    Right,
+    Expand,
+    Shrink,
 }
