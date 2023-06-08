@@ -76,7 +76,7 @@ fn header_as_json() {
         ..Default::default()
     };
 
-    assert_eq!(header.as_json().pretty(4), "{\n    \"name\": \"Test\",\n    \"genre\": \"Maybe\",\n    \"level_author\": \"Anonymous\",\n    \"song_author\": \"Anonymous\",\n    \"background_effect\": \"none\",\n    \"bpm\": 120,\n    \"offset\": 32,\n    \"time_signature_top\": 4,\n    \"time_signature_bottom\": 4,\n    \"bg_color\": 15\n}");
+    assert_eq!(header.as_json().pretty(4), "{\n    \"name\": \"Test\",\n    \"genre\": \"Maybe\",\n    \"level_author\": \"Anonymous\",\n    \"song_author\": \"Anonymous\",\n    \"background_effect\": \"none\",\n    \"bpm\": 120,\n    \"offset\": 32,\n    \"time_signature_top\": 4,\n    \"time_signature_bottom\": 4,\n    \"bg_color\": 15,\n    \"color_table\": [\n        \"#FFFFFF\",\n        \"#0000FF\",\n        \"#00FF00\",\n        \"#00FFFF\",\n        \"#FF0000\",\n        \"#FF00FF\",\n        \"#FF6600\",\n        \"#AAAAAA\",\n        \"#666666\",\n        \"#6666FF\",\n        \"#66FF66\",\n        \"#66FFFF\",\n        \"#FF6666\",\n        \"#FF66FF\",\n        \"#FFFF22\",\n        \"#000000\"\n    ]\n}");
 }
 
 impl Default for Header {
