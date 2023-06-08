@@ -160,17 +160,26 @@ impl App for Main {
             });
             egui::CentralPanel::default().show(ctx, |ui| {
                 ui.input(|input| {
-                    if input.key_pressed(Key::W) || input.key_pressed(Key::ArrowUp) {
+                    if input.key_pressed(Key::ArrowUp) {
                         self.project.shapes[self.selected_shape].pos.y -= 1.0;
                     }
-                    if input.key_pressed(Key::S) || input.key_pressed(Key::ArrowDown) {
+                    if input.key_pressed(Key::ArrowDown) {
                         self.project.shapes[self.selected_shape].pos.y += 1.0;
                     }
-                    if input.key_pressed(Key::A) || input.key_pressed(Key::ArrowLeft) {
+                    if input.key_pressed(Key::ArrowLeft) {
                         self.project.shapes[self.selected_shape].pos.x -= 1.0;
                     }
-                    if input.key_pressed(Key::D) || input.key_pressed(Key::ArrowRight) {
+                    if input.key_pressed(Key::ArrowRight) {
                         self.project.shapes[self.selected_shape].pos.x += 1.0;
+                    }
+                    if input.key_pressed(Key::A) {
+                        self.project.shapes[self.selected_shape].size -= 1.0;
+                    }
+                    if input.key_pressed(Key::S) {
+                        self.project.shapes[self.selected_shape].size += 1.0;
+                    }
+                    if input.key_pressed(Key::Enter) {
+                        self.selected_shape = (self.selected_shape + 1) % self.project.shapes.len();
                     }
                 });
                 self.project.draw(ui, None, self.selected_shape + 1)
