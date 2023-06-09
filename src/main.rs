@@ -115,7 +115,7 @@ impl App for Main {
                 });
             });
             egui::SidePanel::right("shapes").show(ctx, |ui| {
-                if ui.button("Remove shape").clicked() {
+                if ui.button("Remove shape").clicked() && !self.project.shapes.is_empty() {
                     self.project.shapes.remove(self.selected_shape);
                     self.selected_shape = self.selected_shape.saturating_sub(1);
                 }
@@ -176,16 +176,34 @@ impl App for Main {
                         let to_add = if input.key_pressed(Key::Z) {
                             Some(Shape {
                                 ty: shape::ShapeType::Circle,
+                                color: self
+                                    .project
+                                    .shapes
+                                    .get(self.selected_shape)
+                                    .map(|shape| shape.color)
+                                    .unwrap_or_default(),
                                 ..Default::default()
                             })
                         } else if input.key_pressed(Key::X) {
                             Some(Shape {
                                 ty: shape::ShapeType::Square,
+                                color: self
+                                    .project
+                                    .shapes
+                                    .get(self.selected_shape)
+                                    .map(|shape| shape.color)
+                                    .unwrap_or_default(),
                                 ..Default::default()
                             })
                         } else if input.key_pressed(Key::C) {
                             Some(Shape {
                                 ty: shape::ShapeType::Triangle,
+                                color: self
+                                    .project
+                                    .shapes
+                                    .get(self.selected_shape)
+                                    .map(|shape| shape.color)
+                                    .unwrap_or_default(),
                                 ..Default::default()
                             })
                         } else {
