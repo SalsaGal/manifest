@@ -97,13 +97,13 @@ impl App for Main {
                     }
 
                     ui.collapsing("Color table", |ui| {
-                        for i in 0..16 {
-                            ui.radio_value(
-                                &mut self.project.shapes[self.selected_shape].color,
-                                i,
-                                format!("Color {i}"),
-                            );
-                            ui.color_edit_button_srgb(&mut self.project.header.color_table[i]);
+                        if let Some(current_shape) =
+                            self.project.shapes.get_mut(self.selected_shape)
+                        {
+                            for i in 0..16 {
+                                ui.radio_value(&mut current_shape.color, i, format!("Color {i}"));
+                                ui.color_edit_button_srgb(&mut self.project.header.color_table[i]);
+                            }
                         }
                     });
 
