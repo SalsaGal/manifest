@@ -168,6 +168,36 @@ impl App for Main {
                             if input.key_pressed(Key::S) {
                                 shape.size = (shape.size + 1.0).min(7.0);
                             }
+                            if input.key_pressed(Key::Num0) {
+                                shape.color = 0;
+                            }
+                            if input.key_pressed(Key::Num1) {
+                                shape.color = 1;
+                            }
+                            if input.key_pressed(Key::Num2) {
+                                shape.color = 2;
+                            }
+                            if input.key_pressed(Key::Num3) {
+                                shape.color = 3;
+                            }
+                            if input.key_pressed(Key::Num4) {
+                                shape.color = 4;
+                            }
+                            if input.key_pressed(Key::Num5) {
+                                shape.color = 5;
+                            }
+                            if input.key_pressed(Key::Num6) {
+                                shape.color = 6;
+                            }
+                            if input.key_pressed(Key::Num7) {
+                                shape.color = 7;
+                            }
+                            if input.key_pressed(Key::Num8) {
+                                shape.color = 8;
+                            }
+                            if input.key_pressed(Key::Num9) {
+                                shape.color = 9;
+                            }
                             if input.key_pressed(Key::Enter) {
                                 self.selected_shape =
                                     (self.selected_shape + 1) % self.project.shapes.len();
