@@ -43,7 +43,7 @@ impl Default for Options {
     fn default() -> Self {
         Self {
             dark_theme: true,
-            executable_path: "".to_owned(),
+            executable_path: String::new(),
         }
     }
 }
