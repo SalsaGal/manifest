@@ -4,11 +4,11 @@ use std::{
 };
 
 use eframe::{emath::RectTransform, epaint::RectShape};
-use egui::{Pos2, Rect, Vec2};
+use egui::{vec2, Pos2, Rect, Vec2};
 use glam::uvec2;
 use json::{object::Object, Array, JsonValue};
 
-use crate::shape::Shape;
+use crate::shape::{Shape, ShapeType};
 
 #[derive(Debug, Default)]
 pub struct Project {
@@ -62,6 +62,24 @@ impl Project {
                 header[stringify!($i)].to_string()
             };
         }
+
+        let shapes = json
+            .members()
+            .skip(1)
+            .map(|json| Shape {
+                pos: vec2(json["x"].as_f32().unwrap(), json["y"].as_f32().unwrap()),
+                ty: match json["shape"].as_u8().unwrap() {
+                    0 => ShapeType::Circle,
+                    1 => ShapeType::Square,
+                    2 => ShapeType::Triangle,
+                    _ => panic!(),
+                },
+                size: json["scale"].as_f32().unwrap() - 1.0,
+                color: json["color"].as_usize().unwrap(),
+                ..Default::default()
+            })
+            .collect::<Vec<_>>();
+
         Some(Self {
             header: Header {
                 name: header_item!(name),
@@ -73,7 +91,7 @@ impl Project {
                 background_effect: header["background_effect"].to_string(),
                 ..Default::default()
             },
-            shapes: vec![],
+            shapes,
         })
     }
 
