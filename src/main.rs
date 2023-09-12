@@ -64,7 +64,7 @@ impl App for Main {
                             self.project = Project::from_json(json::parse(&file).unwrap()).unwrap();
                         }
                     }
-                    if ui.button("Export").clicked() {
+                    if ui.button("Save file").clicked() {
                         if let Some(mut path) =
                             FileDialog::new().add_filter("json", &["json"]).save_file()
                         {
