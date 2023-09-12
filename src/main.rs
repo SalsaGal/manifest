@@ -27,14 +27,17 @@ struct Main {
 }
 
 impl Main {
-    pub fn new(ctx: &CreationContext) -> Self {
+    pub fn new(ctx: &CreationContext, project: Option<Project>) -> Self {
         let options = Options::load();
         ctx.egui_ctx.set_visuals(match options.dark_theme {
             true => egui::Visuals::dark(),
             false => egui::Visuals::light(),
         });
 
-        Self::default()
+        Self {
+            project: project.unwrap_or_default(),
+            ..Default::default()
+        }
     }
 }
 
@@ -272,7 +275,14 @@ fn main() {
     eframe::run_native(
         "Manifest",
         eframe::NativeOptions::default(),
-        Box::new(|cc| Box::new(Main::new(cc))),
+        Box::new(|cc| {
+            Box::new(Main::new(
+                cc,
+                std::env::args().nth(1).and_then(|a| {
+                    Project::from_json(json::parse(&read_to_string(a).unwrap()).unwrap())
+                }),
+            ))
+        }),
     )
     .unwrap();
 }
