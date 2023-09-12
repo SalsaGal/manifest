@@ -2,7 +2,11 @@ mod options;
 mod project;
 mod shape;
 
-use std::{fs::File, io::Write, num::NonZeroU16};
+use std::{
+    fs::{read_to_string, File},
+    io::Write,
+    num::NonZeroU16,
+};
 
 use eframe::{App, CreationContext};
 use egui::{DragValue, Key, ScrollArea, Vec2};
@@ -48,6 +52,14 @@ impl App for Main {
                     ui.heading("Manifest");
                     if ui.button("New File").clicked() {
                         self.project = Project::default();
+                    }
+                    if ui.button("Load file").clicked() {
+                        if let Some(path) =
+                            FileDialog::new().add_filter("json", &["json"]).pick_file()
+                        {
+                            let file = read_to_string(path).unwrap();
+                            self.project = Project::from_json(json::from(file)).unwrap();
+                        }
                     }
                     if ui.button("Export").clicked() {
                         if let Some(mut path) =
