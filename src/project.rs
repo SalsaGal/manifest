@@ -1,4 +1,7 @@
-use std::num::{NonZeroU16, NonZeroU8};
+use std::{
+    collections::HashMap,
+    num::{NonZeroU16, NonZeroU8},
+};
 
 use eframe::{emath::RectTransform, epaint::RectShape};
 use egui::{Pos2, Rect, Vec2};
@@ -53,7 +56,25 @@ impl Project {
     }
 
     pub fn from_json(json: JsonValue) -> Option<Self> {
-        todo!()
+        let header = &json[0].entries().collect::<HashMap<_, _>>();
+        macro_rules! header_item {
+            ($i: ident) => {
+                header[stringify!($i)].to_string()
+            };
+        }
+        Some(Self {
+            header: Header {
+                name: header_item!(name),
+                song_author: header_item!(song_author),
+                level_author: header_item!(level_author),
+                genre: header_item!(genre),
+                bpm: NonZeroU16::new(header["bpm"].as_u16()?)?,
+                bg_color: header["bg_color"].as_u8()?,
+                background_effect: header["background_effect"].to_string(),
+                ..Default::default()
+            },
+            shapes: vec![],
+        })
     }
 
     pub fn as_json(&self) -> Array {

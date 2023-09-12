@@ -61,7 +61,7 @@ impl App for Main {
                             FileDialog::new().add_filter("json", &["json"]).pick_file()
                         {
                             let file = read_to_string(path).unwrap();
-                            self.project = Project::from_json(json::from(file)).unwrap();
+                            self.project = Project::from_json(json::parse(&file).unwrap()).unwrap();
                         }
                     }
                     if ui.button("Export").clicked() {
