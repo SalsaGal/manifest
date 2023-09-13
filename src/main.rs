@@ -53,7 +53,7 @@ impl App for Main {
             egui::SidePanel::left("control_panel").show(ctx, |ui| {
                 ScrollArea::vertical().show(ui, |ui| {
                     ui.heading("Manifest");
-                    if ui.button("New File").clicked() {
+                    if ui.button("New file").clicked() {
                         self.project = Project::default();
                     }
                     if ui.button("Load file").clicked() {
