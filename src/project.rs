@@ -41,7 +41,7 @@ impl Project {
             .take(shape_count)
             .flat_map(|shape| {
                 let mut to_ret = vec![shape];
-                to_ret.extend(shape.auto_shape.iter());
+                to_ret.extend(shape.auto_shapes.iter());
                 to_ret
             })
             .map(|shape| shape.as_egui_shape(to_screen, &self.header.color_table));

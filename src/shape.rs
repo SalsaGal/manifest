@@ -9,7 +9,7 @@ pub struct Shape {
     pub ty: ShapeType,
     pub color: usize,
     pub moves: Option<Vec<Move>>,
-    pub auto_shape: Vec<Shape>,
+    pub auto_shapes: Vec<Shape>,
 }
 
 impl Shape {
@@ -42,6 +42,10 @@ impl Shape {
             },
             size: value["scale"].as_f32().unwrap() - 1.0,
             color: value["color"].as_usize().unwrap(),
+            auto_shapes: value["auto_shapes"]
+                .members()
+                .map(Self::from_json)
+                .collect(),
             ..Default::default()
         }
     }
@@ -95,7 +99,7 @@ impl Default for Shape {
             ty: ShapeType::Circle,
             color: 0,
             moves: None,
-            auto_shape: vec![],
+            auto_shapes: vec![],
         }
     }
 }
