@@ -1,6 +1,6 @@
 use eframe::emath::RectTransform;
 use egui::{Color32, Pos2, Vec2};
-use json::object::Object;
+use json::{object::Object, JsonValue};
 
 #[derive(Debug)]
 pub struct Shape {
@@ -9,6 +9,7 @@ pub struct Shape {
     pub ty: ShapeType,
     pub color: usize,
     pub moves: Option<Vec<Move>>,
+    pub auto_shape: Vec<Shape>,
 }
 
 impl Shape {
@@ -79,6 +80,7 @@ impl Default for Shape {
             ty: ShapeType::Circle,
             color: 0,
             moves: None,
+            auto_shape: vec![],
         }
     }
 }

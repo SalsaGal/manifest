@@ -39,6 +39,11 @@ impl Project {
             .shapes
             .iter()
             .take(shape_count)
+            .flat_map(|shape| {
+                let mut to_ret = vec![shape];
+                to_ret.extend(shape.auto_shape.iter());
+                to_ret
+            })
             .map(|shape| shape.as_egui_shape(to_screen, &self.header.color_table));
         painter.extend(shapes);
         painter.extend((0..15 * 15).map(|i| uvec2(i % 15, i / 15)).map(|pos| {
