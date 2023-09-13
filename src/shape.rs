@@ -1,5 +1,5 @@
 use eframe::emath::RectTransform;
-use egui::{Color32, Pos2, Vec2};
+use egui::{vec2, Color32, Pos2, Vec2};
 use json::{object::Object, JsonValue};
 
 #[derive(Debug)]
@@ -29,6 +29,21 @@ impl Shape {
         to_ret.insert("y", self.pos.y.into());
         to_ret.insert("scale", (self.size + 1.0).into());
         to_ret
+    }
+
+    pub fn from_json(value: &JsonValue) -> Self {
+        Shape {
+            pos: vec2(value["x"].as_f32().unwrap(), value["y"].as_f32().unwrap()),
+            ty: match value["shape"].as_u8().unwrap() {
+                0 => ShapeType::Circle,
+                1 => ShapeType::Square,
+                2 => ShapeType::Triangle,
+                _ => panic!(),
+            },
+            size: value["scale"].as_f32().unwrap() - 1.0,
+            color: value["color"].as_usize().unwrap(),
+            ..Default::default()
+        }
     }
 
     pub fn as_egui_shape(&self, transform: RectTransform, colors: &[[u8; 3]; 16]) -> egui::Shape {
