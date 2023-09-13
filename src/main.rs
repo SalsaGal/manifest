@@ -214,8 +214,16 @@ impl App for Main {
                                 shape.color = 9;
                             }
                             if input.key_pressed(Key::Enter) {
-                                self.selected_shape =
-                                    (self.selected_shape + 1) % self.project.shapes.len();
+                                if input.modifiers.shift {
+                                    if self.selected_shape == 0 {
+                                        self.selected_shape = self.project.shapes.len() - 1;
+                                    } else {
+                                        self.selected_shape -= 1;
+                                    }
+                                } else {
+                                    self.selected_shape =
+                                        (self.selected_shape + 1) % self.project.shapes.len();
+                                }
                             }
                         }
                         let to_add = if input.key_pressed(Key::Z) {
