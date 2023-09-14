@@ -4,11 +4,11 @@ use std::{
 };
 
 use eframe::{emath::RectTransform, epaint::RectShape};
-use egui::{vec2, Pos2, Rect, Vec2};
+use egui::{Pos2, Rect, Vec2};
 use glam::uvec2;
 use json::{object::Object, Array, JsonValue};
 
-use crate::shape::{Shape, ShapeType};
+use crate::shape::Shape;
 
 #[derive(Debug, Default)]
 pub struct Project {
