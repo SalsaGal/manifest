@@ -85,7 +85,7 @@ impl Project {
                 background_effect: header["background_effect"].to_string(),
                 color_table: header
                     .get("color_table")
-                    .map(|list| {
+                    .map_or(Header::default().color_table, |list| {
                         list.members()
                             .map(|color| {
                                 color
@@ -107,8 +107,7 @@ impl Project {
                             .collect::<Vec<_>>()
                             .try_into()
                             .unwrap()
-                    })
-                    .unwrap_or(Header::default().color_table),
+                    }),
                 ..Default::default()
             },
             shapes,
