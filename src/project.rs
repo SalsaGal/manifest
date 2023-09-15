@@ -83,6 +83,32 @@ impl Project {
                 bpm: NonZeroU16::new(header["bpm"].as_u16()?)?,
                 bg_color: header["bg_color"].as_u8()?,
                 background_effect: header["background_effect"].to_string(),
+                color_table: header
+                    .get("color_table")
+                    .map(|list| {
+                        list.members()
+                            .map(|color| {
+                                color
+                                    .to_string()
+                                    .chars()
+                                    .skip(1)
+                                    .collect::<Vec<_>>()
+                                    .chunks((color.to_string().len() - 1) / 3)
+                                    .map(|text| {
+                                        let multiplier = if text.len() == 1 { 0x11 } else { 0x1 };
+                                        u8::from_str_radix(&String::from_iter(text.iter()), 16)
+                                            .unwrap()
+                                            * multiplier
+                                    })
+                                    .collect::<Vec<_>>()
+                                    .try_into()
+                                    .unwrap()
+                            })
+                            .collect::<Vec<_>>()
+                            .try_into()
+                            .unwrap()
+                    })
+                    .unwrap_or(Header::default().color_table),
                 ..Default::default()
             },
             shapes,

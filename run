@@ -1,5 +1,5 @@
 [default]
-cargo run -- ../sideprojects/Open-Manifold/release/levels/Amber\ Dye/level.json
+cargo run -- ../sideprojects/Open-Manifold/release/levels/Expired\ Uranium/level.json
 
 [default:build]
 cargo build
