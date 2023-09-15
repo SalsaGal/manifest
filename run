@@ -7,3 +7,6 @@ cargo build
 [check]
 cargo clippy
 cargo fmt
+
+[fix]
+cargo clippy --fix -- -W clippy::pedantic
